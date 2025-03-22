@@ -26,15 +26,19 @@
 .code-container{
     display: flex;
     flex-direction: column;
-    margin: auto;
-    width: 44%;
+    /* margin: auto; */
+    margin-left: 10px;
+    width: 45%;
     /* border: 1px solid black; */
     justify-content: space-between;
     height: 650px;
     /* z-index: 7; */
-    /* position: sticky; */
-    position: fixed;
-    margin-left: 840px;
+    position: sticky;
+    margin-top: -7px;
+    top: 0;
+
+    /* position: fixed; */
+    /* margin-left: 840px; */
 }
 
 .code{
