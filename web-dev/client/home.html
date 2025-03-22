@@ -38,7 +38,7 @@
         async function sendCode() {
             const code = document.getElementById('code-box').value;
             const lang = document.getElementById('lang').value;
-            let response = await fetch(`${API_BASE_URL}/submit-code`, {
+            let response = await fetch("https://notepad-vxi7.onrender.com/submit-code", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ lang, code })
@@ -58,7 +58,7 @@
 
         //this funtion is for rendering the the data from database
         async function ReadCode() {
-            let response = await fetch(`${API_BASE_URL}/get-code`);
+            let response = await fetch("https://notepad-vxi7.onrender.com/get-code");
 
             const result = await response.json();
 
@@ -71,7 +71,7 @@
                 button.addEventListener("click",async function(){
                     let ID = data.ID;
                     console.log("ID for delete is: ",ID)
-                    let response = await fetch(`${API_BASE_URL}/delete-code`,{
+                    let response = await fetch("https://notepad-vxi7.onrender.com/delete-code",{
                         method:'POST',
                         body:JSON.stringify({ID}),
                         headers:{'Content-Type':'application/json'}

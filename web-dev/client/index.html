@@ -26,7 +26,7 @@
             const userID = document.getElementById('userID').value;
             const password = document.getElementById('password').value;
 
-            let response = await fetch(`${API_BASE_URL}/login`)
+            let response = await fetch("https://notepad-vxi7.onrender.com/login")
             const result = await response.json();
             console.log("userID & password",result)
 
