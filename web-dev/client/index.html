@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <label for="userID">User ID</label>
+            <input type="text" id="userID"  required>
+            
+            <label for="password">Password</label>
+            <input type="password" id="password" required>
+            
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener("submit",async function(event){
+            event.preventDefault();
+            const userID = document.getElementById('userID').value;
+            const password = document.getElementById('password').value;
+
+            let response = await fetch(`${API_BASE_URL}/login`)
+            const result = await response.json();
+            console.log("userID & password",result)
+
+            if(userID== result.userID && password == result.password){
+                alert("Login Successfully");
+                window.location.href = "home.html";
+            }else{
+                alert("Invalid Username or password");
+            }
+        })
+     
+    </script>
+    <script src="frontend-config.js"></script>
+</body>
+</html>

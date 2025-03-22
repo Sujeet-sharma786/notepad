@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta http-equiv="refresh" content="0; url=login.html" /> -->
+    <title>Document</title>
+    <link rel="stylesheet" href="home.css" />
+</head>
+
+<body>
+    <div class="main-container">
+
+        <div id="code-content-box">
+
+        </div>
+        <div class="code-container">
+            <select name="option" id="lang" style="width: 60px; margin-bottom: 3px;">
+                <option value="C++">C++</option>
+                <option value="Python">Python</option>
+                <option value="Java">Java</option>
+                <option value="JavaScript">JavaScript</option>
+            </select>
+            <textarea id="code-box" placeholder="Write your code here..."
+                style="height: 100%; border: 1px solid black; border-radius: 5px; background-color: black; color: white; font-size: 20px;"></textarea>
+            <button onclick="sendCode()"
+                style="width: 100px; height: 30px; margin-top: 5px; border-radius: 5px; background-color: rgb(70, 214, 70); color: white;border: none; font-size: 15px;">save</button>
+        </div>
+
+    </div>
+
+    <div></div>
+
+
+    <script>
+        // for sending the code data from interface to database
+        async function sendCode() {
+            const code = document.getElementById('code-box').value;
+            const lang = document.getElementById('lang').value;
+            let response = await fetch(`${API_BASE_URL}/submit-code`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ lang, code })
+            })
+
+            const result = await response.json();
+            console.log(result.message);
+            alert(result.message);
+            location.reload();
+        }
+        const container = document.getElementById("code-content-box");
+        const textarea = document.getElementById("code-box");
+
+        function deleteCode(id){
+
+        }
+
+        //this funtion is for rendering the the data from database
+        async function ReadCode() {
+            let response = await fetch(`${API_BASE_URL}/get-code`);
+
+            const result = await response.json();
+
+            console.log("Collection of codes: ",result);
+      
+            result.forEach(data => {
+                const button = document.createElement('button');
+                button.classList.add('btn');
+                button.innerHTML = "Delete";
+                button.addEventListener("click",async function(){
+                    let ID = data.ID;
+                    console.log("ID for delete is: ",ID)
+                    let response = await fetch(`${API_BASE_URL}/delete-code`,{
+                        method:'POST',
+                        body:JSON.stringify({ID}),
+                        headers:{'Content-Type':'application/json'}
+                    })
+
+                    const result = await response.json();
+                    if(result.message == "Done"){
+                        alert('code deleted successfuly')
+                        location.reload();
+                    }else{
+                        alert('something wents wrong...');
+                    }
+                })
+                const div = document.createElement("div");
+                div.classList.add("code-block");
+                const pre = document.createElement("pre");
+                
+                pre.innerHTML = `
+                               <strong>Language:${data.language}</strong><br>
+                                <strong>code:</strong><br>${data.code.replace(/\n/g,"<br>")}`;
+
+                div.appendChild(pre);
+                container.appendChild(button);
+                container.appendChild(div);
+                
+            });
+           
+
+        }
+        // this function is for inserting tab sapce
+        function handleEvent() {
+            if (event.key === "Tab") {
+                event.preventDefault();
+                const start = textarea.selectionStart;
+
+                const end = textarea.selectionEnd;
+                const spaces =  "    ";
+                textarea.value = textarea.value.substring(0, start) + spaces + textarea.value.substring(end);
+                textarea.selectionStart = textarea.selectionEnd = start + spaces.length;
+            }
+
+        }
+
+
+        // for function call at DOM load
+        document.addEventListener("DOMContentLoaded", ReadCode);
+        textarea.addEventListener("keydown", handleEvent);
+
+
+
+
+
+
+
+
+    </script>
+    <script src="frontend-config.js"></script>
+
+</body>
+
+</html>
