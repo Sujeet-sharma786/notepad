@@ -3,7 +3,8 @@
     display: flex;
     flex-direction: row;
     /* height: 100%; */
-    justify-content: space-evenly;
+    /* justify-content: space-evenly; */
+    /* position: fixed; */
 
 }
 
@@ -26,10 +27,14 @@
     display: flex;
     flex-direction: column;
     margin: auto;
-    width: 43%;
+    width: 44%;
     /* border: 1px solid black; */
     justify-content: space-between;
-    height: 500px;
+    height: 650px;
+    /* z-index: 7; */
+    /* position: sticky; */
+    position: fixed;
+    margin-left: 840px;
 }
 
 .code{
@@ -42,4 +47,12 @@
 
 .btn{
     background-color: green;
+    border: none;
+    border-radius: 2px;
+    height: 23px;
+    color: white;
+}
+.btn:hover{
+    cursor: pointer;
+    
 }
