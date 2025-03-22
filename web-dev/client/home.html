@@ -47,7 +47,7 @@
             const result = await response.json();
             console.log(result.message);
             alert(result.message);
-            location.reload();
+            ReadCode();
         }
         const container = document.getElementById("code-content-box");
         const textarea = document.getElementById("code-box");
