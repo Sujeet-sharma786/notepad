@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <meta http-equiv="refresh" content="0; url=login.html" /> -->
-    <title>Document</title>
+    <title>notepad</title>
     <link rel="stylesheet" href="home.css" />
 </head>
 
@@ -16,12 +16,23 @@
 
         </div>
         <div class="code-container">
-            <select name="option" id="lang" style="width: 60px; margin-bottom: 3px;">
-                <option value="C++">C++</option>
-                <option value="Python">Python</option>
-                <option value="Java">Java</option>
-                <option value="JavaScript">JavaScript</option>
-            </select>
+            <div>
+                <select name="option" id="lang" style="width: 60px; margin-bottom: 3px;">
+                    <option value="C++">C++</option>
+                    <option value="Python">Python</option>
+                    <option value="Java">Java</option>
+                    <option value="JavaScript">JavaScript</option>
+                </select>
+                <select name="option" id="data-structure" style="width: 60px; margin-bottom: 3px;"
+                    onchange="reloadPage()">
+                    <option value="DP" selected>DP</option>
+                    <option value="Tree">Tree</option>
+                    <option value="Graph">Graph</option>
+                    <option value="Recursion">Recursion</option>
+                </select>
+            </div>
+
+
             <textarea id="code-box" placeholder="Write your code here..."
                 style="height: 100%; border: 1px solid black; border-radius: 5px; background-color: black; color: white; font-size: 20px;"></textarea>
             <button onclick="sendCode()"
@@ -34,73 +45,163 @@
 
 
     <script>
+
+
+
+
+        function reloadPage() {
+            let selectedElement = document.getElementById('data-structure');
+            localStorage.setItem('selectedOption', selectedElement.value);
+
+            location.reload();
+
+
+        }
+        window.onload = function () {
+            let savedOption = localStorage.getItem('selectedOption');
+            // console.log(`changes DS ${savedOption}`)
+            // document.getElementById('data-structure').value = savedOption;
+            // console.log(document.getElementById('data-structure').value);
+            let selectElement = document.getElementById('data-structure');
+            if(savedOption){
+                selectElement.value = savedOption;
+            }
+            const DS = selectElement.value;
+            console.log('change option ',DS)
+            if(DS==='DP'){
+                ReadCode('get-DP', 'delete-DP', 'dp')
+            }else if(DS ==='Tree'){
+                ReadCode('get-Tree', 'delete-Tree', 'tree')
+            }else if(DS === 'Graph'){
+                ReadCode('get-Graph', 'delete-Graph', 'graph')
+            }else{
+                ReadCode('get-Recursion', 'delete-Recursion', 'recursion')
+            }
+
+        }
+
+        // document.addEventListener("DOMContentLoaded",function(){
+        //     const DS = document.getElementById('data-structure').value;
+        //     console.log(DS);
+           
+        // })
+        
+     
         // for sending the code data from interface to database
         async function sendCode() {
             const code = document.getElementById('code-box').value;
             const lang = document.getElementById('lang').value;
-            let response = await fetch(`${API_BASE_URL}/submit-code`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ lang, code })
-            })
+            const DS = document.getElementById('data-structure').value
+            // console.log(DS)
+            if (DS == 'DP') {
+                let response = await fetch(`${API_BASE_URL}/store-DP`, {
+                    method: "POST",
+                    body: JSON.stringify({ lang, code }),
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                const result = await response.json();
+                if (result) {
+                    alert(result.message);
+                    location.reload();
+                } else {
+                    alert('something wents wrong');
+                }
 
-            const result = await response.json();
-            console.log(result.message);
-            alert(result.message);
-            location.reload();
+            } else if (DS == 'Tree') {
+                let response = await fetch(`${API_BASE_URL}/store-Tree`, {
+                    method: "POST",
+                    body: JSON.stringify({ lang, code }),
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                const result = await response.json();
+                if (result) {
+                    alert(result.message);
+                    location.reload();
+                } else {
+                    alert('something wents wrong');
+                }
+            } else if (DS == 'Graph') {
+                let response = await fetch(`${API_BASE_URL}/store-Graph`, {
+                    method: "POST",
+                    body: JSON.stringify({ lang, code }),
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                const result = await response.json();
+                if (result) {
+                    alert(result.message);
+                    location.reload();
+                } else {
+                    alert('something wents wrong');
+                }
+            } else {
+                let response = await fetch(`${API_BASE_URL}/store-Recursion`, {
+                    method: "POST",
+                    body: JSON.stringify({ lang, code }),
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                const result = await response.json();
+                if (result) {
+                    alert(result.message);
+                    location.reload();
+                } else {
+                    alert('something wents wrong');
+                }
+
+            }
+
+
+            // const result = await response.json();
+            // console.log(result.message);
+            // alert(result.message);
+            // location.reload();
         }
         const container = document.getElementById("code-content-box");
         const textarea = document.getElementById("code-box");
 
-        function deleteCode(id){
-
-        }
+        // const DS = document.getElementById('data-structure').value;
 
         //this funtion is for rendering the the data from database
-        async function ReadCode() {
-            let response = await fetch(`${API_BASE_URL}/get-code`);
+        async function ReadCode(getApiRoute, deleteApiRoute, ds) {
 
+            // if (DS == 'DP') {
+            let response = await fetch(`${API_BASE_URL}/${getApiRoute}`);
             const result = await response.json();
-
-            console.log("Collection of codes: ",result);
-      
-            result.forEach(data => {
+            // console.log(`runs this funtions ${DS}`)
+            container.innerHTML = "";
+            result.slice().reverse().forEach(data => {
                 const button = document.createElement('button');
                 button.classList.add('btn');
-                button.innerHTML = "Delete";
-                button.addEventListener("click",async function(){
-                    let ID = data.ID;
-                    console.log("ID for delete is: ",ID)
-                    let response = await fetch(`${API_BASE_URL}/delete-code`,{
-                        method:'POST',
-                        body:JSON.stringify({ID}),
-                        headers:{'Content-Type':'application/json'}
+                button.innerHTML = 'Delete';
+                button.addEventListener("click", async function () {
+                    let id = data.id;
+                    console.log(id)
+                    let response = await fetch(`${API_BASE_URL}/${deleteApiRoute}`, {
+                        method: 'POST',
+                        body: JSON.stringify({ id }),
+                        headers: { 'Content-Type': 'application/json' }
                     })
-
                     const result = await response.json();
-                    if(result.message == "Done"){
-                        alert('code deleted successfuly')
+                    if (result.message == 'Done') {
+                        alert(`${ds}-code deleted successfully`);
                         location.reload();
-                    }else{
-                        alert('something wents wrong...');
+                    } else {
+                        alert('Something wents wrong')
                     }
-                })
-                const div = document.createElement("div");
-                div.classList.add("code-block");
-                const pre = document.createElement("pre");
-                
-                pre.innerHTML = `
-                               <strong>Language:${data.language}</strong><br>
-                                <strong>code:</strong><br>${data.code.replace(/\n/g,"<br>")}`;
+                });
 
+                const div = document.createElement('div');
+                div.classList.add('code-block');
+                const pre = document.createElement('pre');
+                let lang = {}
+                pre.innerHTML = `<strong>Language: </strong>${data.lang}<br>
+                                        <strong>code: </strong>${data.code.replace(/\n/g, "<br>")}`;
                 div.appendChild(pre);
-                container.appendChild(button);
+                div.appendChild(button);
                 container.appendChild(div);
-                
-            });
-           
-
+            })
         }
+
+       
         // this function is for inserting tab sapce
         function handleEvent() {
             if (event.key === "Tab") {
@@ -108,7 +209,7 @@
                 const start = textarea.selectionStart;
 
                 const end = textarea.selectionEnd;
-                const spaces =  "    ";
+                const spaces = "    ";
                 textarea.value = textarea.value.substring(0, start) + spaces + textarea.value.substring(end);
                 textarea.selectionStart = textarea.selectionEnd = start + spaces.length;
             }
@@ -117,14 +218,7 @@
 
 
         // for function call at DOM load
-        document.addEventListener("DOMContentLoaded", ReadCode);
         textarea.addEventListener("keydown", handleEvent);
-
-
-
-
-
-
 
 
     </script>
