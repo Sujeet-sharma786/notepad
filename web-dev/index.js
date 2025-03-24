@@ -147,9 +147,9 @@ app.post("/delete-Dp",(req,resp)=>{
     })
 })
 app.post("/delete-Tree",(req,resp)=>{
-    const {ID} = req.body;
+    const {id} = req.body;
     // console.log("ID is: ",ID)
-    connection.query(queryArray[9],ID,(err,result)=>{
+    connection.query(queryArray[9],id,(err,result)=>{
         if(err){
             console.log(err);
         }else{
@@ -160,9 +160,9 @@ app.post("/delete-Tree",(req,resp)=>{
     })
 })
 app.post("/delete-Graph",(req,resp)=>{
-    const {ID} = req.body;
+    const {id} = req.body;
     // console.log("ID is: ",ID)
-    connection.query(queryArray[10],ID,(err,result)=>{
+    connection.query(queryArray[10],id,(err,result)=>{
         if(err){
             console.log(err);
         }else{
@@ -173,9 +173,9 @@ app.post("/delete-Graph",(req,resp)=>{
     })
 })
 app.post("/delete-Recursion",(req,resp)=>{
-    const {ID} = req.body;
+    const {id} = req.body;
     // console.log("ID is: ",ID)
-    connection.query(queryArray[11],ID,(err,result)=>{
+    connection.query(queryArray[11],id,(err,result)=>{
         if(err){
             console.log(err);
         }else{
